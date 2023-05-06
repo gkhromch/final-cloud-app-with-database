@@ -37,19 +37,38 @@
 
 <div class="container-fluid">
     {% if grade > 80 %}
-    <div class="alert alert-success">
-       <!--HINT Display passed info -->
-    </div>
-        {% else %}
-        <div class="alert alert-danger">
+        <div class="alert alert-success font-weight-bold display-5">
+        <!--HINT Display passed info -->
+        Congrats, {{ user.first_name }}! You've passed the exam. Your score is {{ grade }} / 100.
+        </div>
+    {% else %}
+        <div class="alert alert-danger font-weight-bold display-5">
             <!--HINT Display failed info -->
+            Sorry, {{ user.first_name }}! You've failed the exam. Your score is {{ grade }} / 100.
         </div>
-        <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>
-        {% endif %}
-        <div class="card-columns-vertical mt-1">
-        <h5 class="">Exam results</h5>
-            <!--HINT Display exam results-->
-        </div>
+        <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course_id %}">Re-test</a>
+    {% endif %}
+
+    <div class="card-columns-vertical mt-1">
+    <h5 class="">Exam results</h5>
+        <!--HINT Display exam results-->
+        {% for row_key, row_values in exam_result.items %}
+            <div class="alert alert-secondary font-weight-bold display-5">{{ row_key }}</div>  
+            <div class="alert">   
+                {% for col_key, value in row_values.items %}
+                    {% if value == 0 %}
+                        <p> {{ col_key }} </p>
+                    {% elif value == 1 %}
+                        <p style="color:red"> Wrong: {{ col_key }} </p>
+                    {% elif value == 2 %}
+                        <p style="color: orange"> Not selected: {{ col_key }} </p>
+                    {% else %}
+                        <p style="color:green"> Correct: {{ col_key }} </p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
     </div>
+</div>
 </body>
 </html>
